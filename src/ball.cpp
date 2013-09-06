@@ -10,18 +10,16 @@
 
 Ball::Ball(Game * game) : GameObject(game)
 {
-    x_velocity_ = 0;
-    y_velocity_ = 0;
-
     width_ = kBallWidth;
-    height_ = kBallHeight;
-
+    height_ = kBallWidth;
     sprite_ = new Sprite(this, kAssetArtBall);
 }
 
 Ball::Ball(Game * game, double x, double y) : GameObject(game, x, y)
 {
-
+    width_ = kBallWidth;
+    height_ = kBallWidth;
+    sprite_ = new Sprite(this, kAssetArtBall);
 }
 
 void Ball::update(int delta_ticks)

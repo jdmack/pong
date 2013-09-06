@@ -92,18 +92,10 @@ void Screen::render_board()
 ////////////////////////////////////////////////////////////////////////////////
 void Screen::render_texture(SDL_Texture * texture, SDL_Rect * offset, SDL_Rect * clip)
 {
-    // TODO(2013-08-28/JM): Set constants for the rendering boundaries
-    //if(offset->x < 0) { offset->x = 0; }
-    //if(offset->x > kScreenWidth) { offset->x = kScreenWidth; }
-    //if(offset->y < 0) { offset->y = 0; }
-    //if(offset->y > kScreenHeight) { offset->y = kScreenHeight; }
-
-    SDL_Rect rect = { (int)offset->x, (int)offset->y, (int)offset->w, (int)offset->h };
-
-    int return_code = SDL_RenderCopy(renderer_, texture, clip, &rect);
+    int return_code = SDL_RenderCopy(renderer_, texture, clip, offset);
 
     if(return_code != 0) {
-        Logger::write(Logger::string_stream << "Render: " << SDL_GetError());
+        Logger::write(Logger::string_stream << "Render Error: " << SDL_GetError());
     }
 }
 
@@ -114,18 +106,10 @@ void Screen::render_texture(SDL_Texture * texture, SDL_Rect * offset, SDL_Rect *
 ////////////////////////////////////////////////////////////////////////////////
 void Screen::render_texture_rotate(SDL_Texture * texture, SDL_Rect * offset, SDL_Rect * clip, double angle)
 {
-    // TODO(2013-08-28/JM): Set constants for the rendering boundaries
-    //if(offset->x < 0) { offset->x = 0; }
-    //if(offset->x > kScreenWidth) { offset->x = kScreenWidth; }
-    //if(offset->y < 0) { offset->y = 0; }
-    //if(offset->y > kScreenHeight) { offset->y = kScreenHeight; }
-
-    SDL_Rect rect = { (int)offset->x, (int)offset->y, (int)offset->w, (int)offset->h };
-
-    int return_code = SDL_RenderCopyEx(renderer_, texture, nullptr, &rect, -angle, nullptr, SDL_FLIP_NONE);
+    int return_code = SDL_RenderCopyEx(renderer_, texture, nullptr, offset, -angle, nullptr, SDL_FLIP_NONE);
 
     if(return_code != 0) {
-        Logger::write(Logger::string_stream << "Render Rotate: " << SDL_GetError());
+        Logger::write(Logger::string_stream << "Render Error: " << SDL_GetError());
     }
 }
 
@@ -191,12 +175,13 @@ void Screen::clean_up()
 SDL_Surface * Screen::load_image(std::string filename)
 {
     SDL_Surface* loaded_image    = nullptr;
-    SDL_Surface* optimized_image = nullptr;
 
     loaded_image = IMG_Load(filename.c_str());
 
-
-    if( loaded_image != NULL ) {
+    if(loaded_image == nullptr) {
+        Logger::write(Logger::string_stream << "IMG_Load Error: " << IMG_GetError());
+    }
+    else {
         Uint32 colorkey = SDL_MapRGB(loaded_image->format, 0xFF, 0, 0xFF);
         SDL_SetColorKey(loaded_image, SDL_TRUE, colorkey);
     }
@@ -212,10 +197,11 @@ SDL_Surface * Screen::load_image(std::string filename)
 SDL_Surface * Screen::load_image_alpha(std::string filename)
 {
     SDL_Surface* loaded_image = nullptr;
-    SDL_Surface* optimized_image = nullptr;
 
     loaded_image = IMG_Load(filename.c_str());
-
+    if(loaded_image == nullptr) {
+        Logger::write(Logger::string_stream << "IMG_Load Error: " << IMG_GetError());
+    }
     return loaded_image;
 }
 
@@ -226,7 +212,13 @@ SDL_Surface * Screen::load_image_alpha(std::string filename)
 ////////////////////////////////////////////////////////////////////////////////
 SDL_Texture * Screen::load_texture(std::string filename)
 {
-    return SDL_CreateTextureFromSurface(renderer_, load_image(filename));
+    SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer_, load_image(filename));
+
+    if(texture == nullptr) {
+        Logger::write(Logger::string_stream << "Error creating texture: " << SDL_GetError());
+    }
+
+     return texture;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -236,7 +228,13 @@ SDL_Texture * Screen::load_texture(std::string filename)
 ////////////////////////////////////////////////////////////////////////////////
 SDL_Texture * Screen::load_texture_alpha(std::string filename)
 {
-    return SDL_CreateTextureFromSurface(renderer_, load_image_alpha(filename));
+    SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer_, load_image_alpha(filename));
+
+    if(texture == nullptr) {
+        Logger::write(Logger::string_stream << "Error creating texture: " << SDL_GetError());
+    }
+
+     return texture;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
