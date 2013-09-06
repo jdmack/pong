@@ -11,5 +11,6 @@ const std::string kPathFont       = kPathAssets + "font/";
 
 /* Art */
 const std::string kAssetArtBall = kPathArt + "ball.png";
+const std::string kAssetArtPaddle = kPathArt + "paddle.png";
 
 #endif

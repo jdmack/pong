@@ -72,7 +72,7 @@ void Game::game_loop()
 
         // Draw
         screen_->clear();
-        screen_->render_board();
+        screen_->render_table();
         ball->render();
         //left_paddle->render();
         //right_paddle->render();

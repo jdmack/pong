@@ -15,7 +15,7 @@ class Screen
     private:
         SDL_Window * window_;
         SDL_Renderer * renderer_;
-        SDL_Texture * board_;
+        SDL_Texture * table_;
 
     public:
         Screen();
@@ -23,7 +23,7 @@ class Screen
         // accessors
         SDL_Window * window() const { return window_; }
         SDL_Renderer * renderer() const { return renderer_; }
-        SDL_Texture * board() const { return board_; }
+        SDL_Texture * table() const { return table_; }
 
         // mutators
 
@@ -38,7 +38,7 @@ class Screen
         void render_texture_rotate(SDL_Texture * source, SDL_Rect * offset, SDL_Rect * clip , double angle);
         void apply_surface(SDL_Surface * source, SDL_Surface * destination, SDL_Rect * offset, SDL_Rect * clip = nullptr);
 
-        void render_board();
+        void render_table();
 
         SDL_Surface * load_image(std::string);
         SDL_Surface * load_image_alpha(std::string);

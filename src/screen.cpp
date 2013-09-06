@@ -15,7 +15,7 @@ Screen::Screen()
 {
     window_ = nullptr;
     renderer_ = nullptr;
-    board_ = nullptr;
+    table_ = nullptr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -49,17 +49,14 @@ bool Screen::init()
         return false;
     }
 
-    // Create board image
+    // Create table image
     SDL_Surface * surface = SDL_CreateRGBSurface(0, kScreenWidth, kScreenHeight, 32, kRedMask, kGreenMask, kBlueMask, kAlphaMask);
     if(surface == nullptr) {
-    	Logger::write("Error: Could not create board surface");
+    	Logger::write("Error: Could not create table surface");
         return false;
     }
 
-    const int kBorderSpace     = 50;
-    const int kBorderWidth     = kScreenWidth - (kBorderSpace * 2);
-    const int kBorderHeight    = kScreenHeight - (kBorderSpace * 2);
-    const int kBorderThickness = 10;
+
 
     SDL_Rect rects[5] = { { kBorderSpace, kBorderSpace, kBorderWidth, kBorderThickness },
     					  { kScreenWidth - kBorderSpace - kBorderThickness, kBorderSpace, kBorderThickness, kBorderHeight },
@@ -70,19 +67,19 @@ bool Screen::init()
 
     SDL_FillRects(surface, rects, 5, SDL_MapRGB(surface->format, 0xFF, 0xFF, 0xFF));
 
-    board_ = SDL_CreateTextureFromSurface(renderer_, surface);
-    if(board_ == nullptr) {
-    	Logger::write("Error: Could not create board texture");
+    table_ = SDL_CreateTextureFromSurface(renderer_, surface);
+    if(table_ == nullptr) {
+    	Logger::write("Error: Could not create table texture");
         return false;
     }
 
     return true;
 }
 
-void Screen::render_board()
+void Screen::render_table()
 {
 	SDL_Rect offset = { 0, 0, kScreenWidth, kScreenHeight };
-	render_texture(board_, &offset, nullptr);
+	render_texture(table_, &offset, nullptr);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

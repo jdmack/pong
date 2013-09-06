@@ -30,48 +30,52 @@ void Ball::update(int delta_ticks)
         }
     }
 
-
-
-		// Accelerate
+    // Accelerate
     /*
-		if((std::abs(x_velocity_) < std::abs(movement_command->maximum_velocity().x_component())) || ( std::abs(y_velocity_) < std::abs(movement_command->maximum_velocity().y_component())) ) {
-			x_velocity_ += x_acceleration_ * (delta_ticks / 1000.f);
-			y_velocity_ += y_acceleration_ * (delta_ticks / 1000.f);
-		}
-		*/
+    if((std::abs(x_velocity_) < std::abs(movement_command->maximum_velocity().x_component())) || ( std::abs(y_velocity_) < std::abs(movement_command->maximum_velocity().y_component())) ) {
+        x_velocity_ += x_acceleration_ * (delta_ticks / 1000.f);
+        y_velocity_ += y_acceleration_ * (delta_ticks / 1000.f);
+    }
+    */
 
-		// Move left/right
-		x_position_ += x_velocity_ * (delta_ticks / 1000.f);
+    // Move left/right
+    x_position_ += x_velocity_ * (delta_ticks / 1000.f);
 
-		// Move up/down
-		y_position_ += y_velocity_ * (delta_ticks / 1000.f);
+    // Move up/down
+    y_position_ += y_velocity_ * (delta_ticks / 1000.f);
 
-		// Check collisions
-		// Check left boundary
-		if(x_position_ - (width_ / 2) < 0) {
-			Logger::write("STOPPING: Collision with LEFT screen boundary");
-			stop();
-			x_position_ = 0 + (width_ / 2);
-		}
-		// Check right boundary
-		else if(x_position_ + (width_ / 2) > kScreenWidth) {
-			Logger::write("STOPPING: Collision with RIGHT screen boundary");
-			stop();
-			x_position_ = kScreenWidth - (width_ / 2);
-		}
+    // Check collisions
+    // Check left boundary
+    if(x_position_ - (width_ / 2) < 0) {
+        Logger::write("Collision with LEFT screen boundary");
+        // Goal right side
+        x_position_ = 0 + (width_ / 2);
+        x_velocity_ *= -1;
+    }
+    // Check right boundary
+    else if(x_position_ + (width_ / 2) > kScreenWidth) {
+        Logger::write("Collision with RIGHT screen boundary");
+        // Goal right side
+        x_position_ = kScreenWidth - (width_ / 2);
+        x_velocity_ *= -1;
+    }
 
-		// Check top boundary
-		if(y_position_ - (height_ / 2) < 0) {
-			Logger::write("STOPPING: Collision with TOP screen boundary");
-			stop();
-			y_position_ = 0 + (height_ / 2);
-		}
-		// Check bottom boundary
-		else if(y_position_ + (height_ / 2) > kScreenHeight) {
-			Logger::write("STOPPING: Collision with BOTTOM screen boundary");
-			stop();
-			y_position_ = kScreenHeight - (height_ / 2);
-		}
+    // Check top boundary
+    if(y_position_ - (height_ / 2) < 0) {
+        Logger::write("Collision with TOP screen boundary");
+        // Bounce
+        y_position_ = 0 + (height_ / 2);
+        y_velocity_ *= -1;
+    }
+    // Check bottom boundary
+    else if(y_position_ + (height_ / 2) > kScreenHeight) {
+        Logger::write("Collision with BOTTOM screen boundary");
+        // Bounce
+        y_position_ = kScreenHeight - (height_ / 2);
+        y_velocity_ *= -1;
+    }
+
+    // Check Paddle collisions
 
 }
 
@@ -91,38 +95,21 @@ bool Ball::contains_point(double x, double y)
 
 void Ball::move(double x, double y)
 {
-	/*
-    Logger::write("move command");
+    x_position_ = x;
+    y_position_ = y;
+}
 
-    current_action_ = new Movement(Vector(x_position_, y_position_, x, y), Coordinate(x, y));
+void Ball::reset()
+{
+    x_position_ = kScreenWidth / 2;
+    y_position_ = kScreenHeight / 2;
+}
 
-    Movement * movement_command = static_cast<Movement*>(current_action_);
-    movement_command->set_distance(Movement::calculate_distance(Coordinate(movement_command->destination().x_position(), movement_command->destination().y_position()), Coordinate(x_position_, y_position_)));
+void Ball::serve(int direction)
+{
+    // Pick random point on serve line
 
-    double dir = movement_command->vector().direction() - rotation_;
-    if((dir > 0) && (std::abs(dir) <= 180)) { movement_command->set_clockwise(false); }
-    if((dir > 0) && (std::abs(dir) > 180)) { movement_command->set_clockwise(true); }
-    if((dir < 0) && (std::abs(dir) <= 180)) { movement_command->set_clockwise(true); }
-    if((dir < 0) && (std::abs(dir) > 180)) { movement_command->set_clockwise(false); }
+    // Pick random angle between point->top corner and point->bottom corner
 
-    //dir += (dir > 180) ? -360 : (dir < -180) ? 360 : 0;
-    if(dir > 180) {
-        dir -= 360;
-    }
-    else if(dir < -180) {
-        dir += 360;
-    }
-    movement_command->set_degrees(std::abs(dir));
-
-    Vector acceleration(kBallAcceleration, movement_command->vector().direction());
-
-    movement_command->set_maximum_velocity(Vector(kBallVelocity, movement_command->vector().direction()));
-
-    x_velocity_ = 0;
-    y_velocity_ = 0;
-    x_acceleration_ = acceleration.x_component();
-    y_acceleration_ = acceleration.y_component();
-    Logger::write(Logger::string_stream << "Move - (x,y): (" << movement_command->destination().x_position() << "," << movement_command->destination().x_position()
-            << ") direction: " << movement_command->vector().direction());
-*/
+    // Set x/y velocity for that vector
 }

@@ -6,6 +6,19 @@
 const int kScreenWidth      = 1600;
 const int kScreenHeight     = 900;
 
+const int kDirectionLeft = -1;
+const int kDirectionRight = 1;
+
+const int kBorderSpace     = 50;
+const int kBorderWidth     = kScreenWidth - (kBorderSpace * 2);
+const int kBorderHeight    = kScreenHeight - (kBorderSpace * 2);
+const int kBorderThickness = 10;
+
+const int kTableX      = kBorderSpace + kBorderThickness;
+const int kTableY      = kBorderSpace + kBorderThickness;
+const int kTableWidth  = kBorderWidth - (kBorderThickness * 2);
+const int kTableHeight = kBorderHeight - (kBorderThickness * 2);
+
 /* Strings */
 const std::string kWindowName = "Pong";
 const std::string kLogFilename = "pong.log";

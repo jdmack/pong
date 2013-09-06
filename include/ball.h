@@ -26,6 +26,9 @@ class Ball : public GameObject
         void deselect();
         bool contains_point(double x, double y);
         void move(double x, double y);
+        void reset();
+        void serve(int direction);
+
 
         void update(int deltaTicks);
 
